@@ -1,0 +1,113 @@
+{% comment %}
+  Dynamically renders vehicle selector, image carousel, markers, and part cards
+  - Uses only collections selected in theme editor
+  - Main vehicle images come from assets (e.g., jeep.png)
+  - Each product = one part
+{% endcomment %}
+<div class="tr-custom-section">
+  {%- assign vehicle_collections = section.settings.vehicle_collections -%}
+
+  <div class="tr-heading-container">
+    {% if section.settings.heading != blank %}
+      <h2 class="tr-heading text-white">{{ section.settings.heading }}</h2>
+    {% endif %}
+    {% if section.settings.subtext != blank %}
+      <p class="tr-subheading">{{ section.settings.subtext }}</p>
+    {% endif %}
+  </div>
+
+  {% if vehicle_collections != blank %}
+    <div class="tr-vehicle-selector-wrapper">
+      <div class="tr-vehicle-selector">
+        {% for collection in vehicle_collections %}
+          {% assign handle = collection.handle %}
+          <button class="tr-vehicle-btn {% if forloop.first %}active{% endif %}" data-vehicle="{{ handle }}">
+            <img src="{{ handle | append: '.png' | asset_url }}" width="" height="" alt="{{ handle | capitalize }}">
+            <span>{{ collections[handle].title | default: handle | upcase }}</span>
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="tr-container">
+      <div class="tr-image-map-wrapper">
+        <div class="tr-main-image-carousel">
+          <button class="tr-carousel-arrow left">&#10094;</button>
+          <div class="tr-carousel-images">
+            {% for collection in vehicle_collections %}
+              {% assign handle = collection.handle %}
+              <img src="{{ handle | append: '.png' | asset_url }}" width="" height="" data-vehicle="{{ handle }}">
+            {% endfor %}
+          </div>
+          <button class="tr-carousel-arrow right">&#10095;</button>
+        </div>
+        <div id="markerContainer"></div>
+      </div>
+
+      <div class="tr-card-carousel" id="cardStack"></div>
+    </div>
+
+    <script type="application/json" id="vehicle-products">
+      {
+        {% for collection in vehicle_collections %}
+          {% assign handle = collection.handle %}
+          {{ handle | json }}: [
+            {% assign vehicle_products = collections[handle].products %}
+            {% for product in vehicle_products %}
+              {
+                "title": {{ product.title | json }},
+                "price": {{ product.price | money | json }},
+                "img": {% if product.featured_image %} {{ product.featured_image | image_url | json }} {% else %} null {% endif %}
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      }
+    </script>
+
+    <script type="application/json" id="vehicleHandles">
+      [
+        {% for collection in vehicle_collections %}
+          "{{ collection.handle }}"{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    </script>
+  {% else %}
+    <p style="text-align:center; padding: 2rem;">
+      No vehicle collections selected. Please select collections in the theme editor.
+    </p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Glow Product Mapper",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Vehicle Part Mapper"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subheading or description",
+      "default": "Explore our parts by vehicle below."
+    },
+    {
+      "type": "collection_list",
+      "id": "vehicle_collections",
+      "label": "Vehicle Collections",
+      "limit": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Glow Product Mapper",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
