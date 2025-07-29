@@ -197,7 +197,7 @@
     flex-wrap: wrap;
   }
   .tr-card {
-    max-width: 130px;
+    max-width: 150px;
   }
   .tr-marker {
     width: 3.5rem;
@@ -205,10 +205,10 @@
     font-size: 1.5rem;
   }
   .tr-card-body h4 {
-    font-size: 0.99rem;
+    font-size: 1.5rem;
   }
   .tr-card-body p {
-    font-size: 0.99rem;
+    font-size: 1.4rem;
   }
   .tr-vehicle-btn img {
     width: 65px;
@@ -216,12 +216,16 @@
   .tr-vehicle-btn span {
     font-size: 1.2rem;
   }
+  .tr-card-badge {
+    font-size: 13px;
+    padding: 5px 13px 7px 11px;
+  }
 }
 
 /* Mobile View */
 @media (max-width: 480px) {
   .tr-card {
-    max-width: 120px;
+    max-width: 150px;
   }
   .tr-marker {
     width: 2.7rem;
@@ -229,10 +233,10 @@
     font-size: 1.3rem;
   }
   .tr-card-body h4 {
-    font-size: 0.97rem;
+    font-size: 1.3rem;
   }
   .tr-card-body p {
-    font-size: 0.97rem;
+    font-size: 1.1rem;
   }
   .tr-vehicle-selector {
     gap: 0;
@@ -245,6 +249,10 @@
   }
   .tr-vehicle-btn span {
     font-size: 0.8rem;
+  }
+  .tr-card-badge {
+    font-size: 12px;
+    padding: 5px 11px 7px 9px;
   }
 }
 
