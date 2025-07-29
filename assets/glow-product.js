@@ -122,6 +122,7 @@ function renderVehicle(vehicle) {
     const card = document.createElement("div");
     card.className = "tr-card";
     card.innerHTML = `
+    <div class="tr-card-badge">${index + 1}</div>
     <img src="${part.img}" alt="${part.title}" />
     <div class="tr-card-body">
       <h4>${part.title}</h4>

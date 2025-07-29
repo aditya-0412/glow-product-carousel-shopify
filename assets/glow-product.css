@@ -121,6 +121,7 @@
   display: none;
 }
 .tr-card {
+  position: relative;
   max-width: 170px;
   flex: 0 0 auto;
   background: white;
@@ -129,6 +130,21 @@
   transition: transform 0.2s, border-color 0.3s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
+
+.tr-card-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #f82930;
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 17px;
+  padding: 5px 15px 5px 12px;
+  clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+  z-index: 2;
+}
+
 .tr-card.active {
   border-color: #f82930;
 }
