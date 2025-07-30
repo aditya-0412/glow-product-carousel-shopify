@@ -145,8 +145,24 @@ function renderVehicle(vehicle) {
       document
         .querySelectorAll(".tr-marker, .tr-card")
         .forEach((el) => el.classList.remove("active"));
+
       marker.classList.add("active");
       card.classList.add("active");
+
+      // Scroll horizontally to center the card
+      const cardContainer = card.parentElement;
+      const containerRect = cardContainer.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+
+      const scrollLeft =
+        cardContainer.scrollLeft +
+        (cardRect.left - containerRect.left) -
+        (containerRect.width / 2 - cardRect.width / 2);
+
+      cardContainer.scrollTo({
+        left: scrollLeft,
+        behavior: "smooth",
+      });
     });
 
     card.addEventListener("mouseenter", () => {
