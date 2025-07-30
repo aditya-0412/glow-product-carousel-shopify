@@ -71,6 +71,7 @@ for (const type in vehicleData) {
       title: product?.title ?? "",
       price: product?.price ?? "",
       img: product?.img ?? "",
+      url: product?.url ?? "",
     };
   });
 }
@@ -113,6 +114,7 @@ function renderVehicle(vehicle) {
 
   const parts = vehicleData[vehicle];
   parts.forEach((part, index) => {
+    console.log(part.url);
     const marker = document.createElement("div");
     marker.className = "tr-marker";
     marker.textContent = index + 1;
@@ -122,12 +124,18 @@ function renderVehicle(vehicle) {
     const card = document.createElement("div");
     card.className = "tr-card";
     card.innerHTML = `
+    <a href="${part.url || ""}" class="tr-text-decoration-none">
     <div class="tr-card-badge">${index + 1}</div>
     <img src="${part.img}" alt="${part.title}" />
     <div class="tr-card-body">
-      <h4>${part.title}</h4>
-      <p>${part.price}</p>
-    </div>
+      <div class="tr-card-info">
+        <h4>${part.title}</h4>
+        <p>${part.price}</p>
+      </div>
+       <a href="${
+         part.url || ""
+       }" class="tr-view-btn">VIEW PRODUCT <span>❯</span></a>
+    </div></a>
   `;
 
     markerContainer.appendChild(marker);
@@ -148,10 +156,6 @@ function renderVehicle(vehicle) {
         .forEach((el) => el.classList.remove("active"));
       marker.classList.add("active");
       card.classList.add("active");
-    });
-
-    card.addEventListener("click", () => {
-      window.location.href = "#";
     });
   });
 }

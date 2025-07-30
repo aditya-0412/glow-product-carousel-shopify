@@ -129,8 +129,35 @@
   overflow: hidden;
   transition: transform 0.2s, border-color 0.3s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
 }
 
+.tr-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  padding: 0.75rem 1rem;
+}
+
+.tr-card-info {
+  flex-grow: 1;
+}
+
+.tr-card-body h4 {
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: #111;
+}
+
+.tr-card-body p {
+  color: #444;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Badge */
 .tr-card-badge {
   position: absolute;
   top: 0;
@@ -148,24 +175,49 @@
 .tr-card.active {
   border-color: #f82930;
 }
+
 .tr-card img {
   width: 100%;
   height: auto;
   display: block;
 }
-.tr-card-body {
-  padding: 0.75rem 1rem;
-}
-.tr-card-body h4 {
-  font-weight: bold;
-  margin: 0.5rem 0;
-  /* font-size: 1rem; */
-  color: #111;
-}
-.tr-card-body p {
-  /* font-size: 0.875rem; */
-  color: #444;
+
+/* Button styles */
+.tr-view-btn {
+  justify-content: center;
+  font-size: 1.3rem;
   font-style: italic;
+  font-weight: bold;
+  color: #f82930;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-top: 1rem;
+  transition: color 0.2s;
+  padding: 10px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tr-view-btn span {
+  margin-left: 6px;
+  margin-top: -2px;
+  font-size: 15px;
+  transform: translateX(0);
+  transition: transform 0.2s;
+}
+
+.tr-text-decoration-none {
+  text-decoration: none;
+  cursor: auto;
+}
+
+/* On hover: change color and shift arrow */
+.tr-view-btn:hover {
+  color: #df1f26;
+}
+
+.tr-view-btn:hover span {
+  transform: translateX(5px);
 }
 
 @media (max-width: 950px) {
@@ -185,6 +237,16 @@
   }
   .tr-carousel-arrow {
     display: none;
+  }
+  .tr-view-btn {
+    font-size: 1.2rem;
+    letter-spacing: 0;
+    margin-top: 1rem;
+    padding: 0px 0px 10px 0px;
+  }
+  .tr-view-btn span {
+    margin-top: -2px;
+    font-size: 12px;
   }
 }
 
@@ -286,7 +348,6 @@
   border: none;
   font-size: 4rem;
   cursor: pointer;
-  z-index: 10;
 }
 
 .tr-carousel-arrow.left {
