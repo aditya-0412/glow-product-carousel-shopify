@@ -181,6 +181,7 @@ vehicleButtons.forEach((button) => {
     const vehicle = button.dataset.vehicle;
     currentSlide = vehicleKeys.indexOf(vehicle);
     switchVehicle(vehicle);
+    cardStack.scrollLeft = 0;
   });
 });
 
