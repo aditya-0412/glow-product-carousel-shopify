@@ -37,7 +37,7 @@ const vehicleData = {
     { pos: ["29%", "73%"] },
     { pos: ["40%", "84%"] },
   ],
-  car: [
+  car : [
     { pos: ["67%", "13%"] },
     { pos: ["43%", "30%"] },
     { pos: ["14%", "48%"] },
@@ -113,6 +113,8 @@ function renderVehicle(vehicle) {
   cardStack.innerHTML = "";
 
   const parts = vehicleData[vehicle];
+  console.log(vehicle);
+  console.log(vehicleData[vehicle]);
   parts.forEach((part, index) => {
     console.log(part.url);
     const marker = document.createElement("div");

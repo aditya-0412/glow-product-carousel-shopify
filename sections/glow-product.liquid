@@ -4,6 +4,9 @@
   - Main vehicle images come from assets (e.g., jeep.png)
   - Each product = one part
 {% endcomment %}
+
+
+
 <div class="tr-custom-section">
   {%- assign vehicle_collections = section.settings.vehicle_collections -%}
 
@@ -21,9 +24,9 @@
       <div class="tr-vehicle-selector">
         {% for collection in vehicle_collections %}
           {% assign handle = collection.handle %}
-          <button class="tr-vehicle-btn {% if forloop.first %}active{% endif %}" data-vehicle="{{ handle }}">
-            <img src="{{ handle | append: '.png' | asset_url }}" width="" height="" alt="{{ handle | capitalize }}">
-            <span>{{ collections[handle].title | default: handle | upcase }}</span>
+          <button class="tr-vehicle-btn {% if forloop.first %}active{% endif %}" data-vehicle="{{ handle | downcase | remove: "-tt" }}">
+            <img src="{{ collection.image | collection_img_url: 'medium' }}" width="" height="" alt="{{ handle | capitalize }}">
+            <span>{{ collections[handle].title | default: handle | upcase  | remove: "-TT" }}</span>
           </button>
         {% endfor %}
       </div>
@@ -36,7 +39,7 @@
           <div class="tr-carousel-images">
             {% for collection in vehicle_collections %}
               {% assign handle = collection.handle %}
-              <img src="{{ handle | append: '.png' | asset_url }}" width="" height="" data-vehicle="{{ handle }}">
+              <img src="{{ collection.image | collection_img_url: 'original' }}" width="" height="" data-vehicle="{{ handle | downcase | remove: "-tt" }}">
             {% endfor %}
           </div>
           <button class="tr-carousel-arrow right">&#10095;</button>
@@ -51,7 +54,7 @@
       {
         {% for collection in vehicle_collections %}
           {% assign handle = collection.handle %}
-          {{ handle | json }}: [
+          {{ handle | json | remove: "-tt" }}: [
             {% assign vehicle_products = collections[handle].products %}
             {% for product in vehicle_products %}
               {

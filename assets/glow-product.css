@@ -17,8 +17,10 @@
   max-width: 1200px;
   display: block;
   text-align: center;
-  margin: 50px auto;
+  margin: 50px auto -35px auto;
   padding: 1rem;
+  font-size: 36px; 
+    font-weight: 700;
 }
 .text-white {
   color: white;
@@ -57,13 +59,13 @@
 
 .tr-vehicle-btn img {
   width: 170px;
-  height: auto;
+  height: 85px;
   transition: transform 0.3s ease;
 }
 
 .tr-vehicle-btn span {
   margin-top: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   white-space: nowrap;
   font-style: italic;
 }
@@ -148,6 +150,7 @@
   font-weight: bold;
   margin: 0.5rem 0;
   color: #111;
+  font-size:15px;
 }
 
 .tr-card-body p {
@@ -184,7 +187,7 @@
 /* Button styles */
 .tr-view-btn {
   justify-content: center;
-  font-size: 1.3rem;
+  font-size: 13px;
   font-style: italic;
   font-weight: bold;
   color: #f82930;
@@ -195,6 +198,7 @@
   padding: 10px;
   display: inline-flex;
   align-items: center;
+  white-space: nowrap;
 }
 
 .tr-view-btn span {
@@ -212,7 +216,7 @@
 
 /* On hover: change color and shift arrow */
 .tr-view-btn:hover {
-  color: #df1f26;
+  color: #df1f26!important;
 }
 
 .tr-view-btn:hover span {
@@ -262,6 +266,10 @@
 @media (max-width: 950px) {
   .tr-vehicle-btn img {
     width: 100px;
+    height:50px;
+  }
+  .tr-heading {
+    font-size: 35px;
   }
 }
 
@@ -278,7 +286,6 @@
     display: none;
   }
   .tr-view-btn {
-    font-size: 1.2rem;
     letter-spacing: 0;
     margin-top: 1rem;
     padding: 0px 0px 10px 0px;
@@ -306,20 +313,25 @@
     font-size: 1.5rem;
   }
   .tr-card-body h4 {
-    font-size: 1.5rem;
+    font-size: 15px !important;
+    padding: 3px 2px;
   }
   .tr-card-body p {
-    font-size: 1.4rem;
+    font-size: 15px;
   }
   .tr-vehicle-btn img {
     width: 65px;
+    height:30px;
   }
   .tr-vehicle-btn span {
-    font-size: 1.2rem;
+    font-size: 13px;
   }
   .tr-card-badge {
     font-size: 13px;
     padding: 5px 13px 7px 11px;
+  }
+  .tr-heading {
+    font-size: 30px;
   }
 }
 
@@ -337,19 +349,20 @@
     font-size: 1.3rem;
   }
   .tr-card-body p {
-    font-size: 1.1rem;
+    font-size: 15px;
   }
   .tr-vehicle-selector {
     gap: 0;
   }
   .tr-vehicle-btn img {
     width: 45px;
+    height:30px;
   }
   .tr-vehicle-btn {
     font-size: 0.5rem;
   }
   .tr-vehicle-btn span {
-    font-size: 1.1rem;
+    font-size: 11px;
   }
   .tr-card-badge {
     font-size: 12px;
@@ -359,12 +372,15 @@
 
 @media (max-width: 365px) {
   .tr-vehicle-btn span {
-    font-size: 0.9rem;
+    font-size: 9px;
+  }
+  .tr-vehicle-btn img {
+    height: 25px;
   }
 }
 
 @media (max-width: 335px) {
   .tr-vehicle-btn span {
-    font-size: 0.8rem;
+    font-size: 8px;
   }
 }
