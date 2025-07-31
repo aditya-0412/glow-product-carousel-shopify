@@ -5,8 +5,6 @@
   - Each product = one part
 {% endcomment %}
 
-
-
 <div class="tr-custom-section">
   {%- assign vehicle_collections = section.settings.vehicle_collections -%}
 
@@ -24,9 +22,17 @@
       <div class="tr-vehicle-selector">
         {% for collection in vehicle_collections %}
           {% assign handle = collection.handle %}
-          <button class="tr-vehicle-btn {% if forloop.first %}active{% endif %}" data-vehicle="{{ handle | downcase | remove: "-tt" }}">
-            <img src="{{ collection.image | collection_img_url: 'medium' }}" width="" height="" alt="{{ handle | capitalize }}">
-            <span>{{ collections[handle].title | default: handle | upcase  | remove: "-TT" }}</span>
+          <button
+            class="tr-vehicle-btn {% if forloop.first %}active{% endif %}"
+            data-vehicle="{{ handle | downcase | remove: "-tt" }}"
+          >
+            <img
+              src="{{ collection.image | collection_img_url: 'medium' }}"
+              width=""
+              height=""
+              alt="{{ handle | capitalize }}"
+            >
+            <span>{{ collections[handle].title | default: handle | upcase | remove: '-TT' }}</span>
           </button>
         {% endfor %}
       </div>
@@ -34,17 +40,26 @@
 
     <div class="tr-container">
       <div class="tr-image-map-wrapper">
+        <!-- Loader -->
+        <div class="loader" id="imageLoader" style="display: none;"></div>
         <div class="tr-main-image-carousel">
           <button class="tr-carousel-arrow left">&#10094;</button>
           <div class="tr-carousel-images">
             {% for collection in vehicle_collections %}
               {% assign handle = collection.handle %}
-              <img src="{{ collection.image | collection_img_url: 'original' }}" width="" height="" data-vehicle="{{ handle | downcase | remove: "-tt" }}">
+              <img
+                src="{{ collection.image | collection_img_url: 'original' }}"
+                width=""
+                height=""
+                data-vehicle="{{ handle | downcase | remove: "-tt" }}"
+                loading="lazy"
+              >
             {% endfor %}
           </div>
           <button class="tr-carousel-arrow right">&#10095;</button>
         </div>
-        <div id="markerContainer"></div>
+        <!-- hide markers initially -->
+        <div id="markerContainer" style="display: none;"></div>
       </div>
 
       <div class="tr-card-carousel" id="cardStack"></div>
@@ -72,10 +87,11 @@
     <script type="application/json" id="vehicleHandles">
       [
         {% for collection in vehicle_collections %}
-          "{{ collection.handle }}"{% unless forloop.last %},{% endunless %}
+          "{{ collection.handle | downcase | remove: "-tt" }}"{% unless forloop.last %},{% endunless %}
         {% endfor %}
       ]
     </script>
+
   {% else %}
     <p style="text-align:center; padding: 2rem;">
       No vehicle collections selected. Please select collections in the theme editor.

@@ -1,26 +1,22 @@
 const markerContainer = document.getElementById("markerContainer");
 const cardStack = document.getElementById("cardStack");
 const vehicleButtons = document.querySelectorAll(".tr-vehicle-selector button");
-
 const carouselImages = document.querySelector(".tr-carousel-images");
 const carouselSlides = document.querySelectorAll(".tr-carousel-images img");
 const leftArrow = document.querySelector(".tr-carousel-arrow.left");
 const rightArrow = document.querySelector(".tr-carousel-arrow.right");
 
-const vehicleImages = {
-  jeep: "images/jeep.png",
-  truck: "images/truck.png",
-  car: "images/car.png",
-  motorcycle: "images/motorcycle.png",
-  cybertruck: "images/cybertruck.png",
-};
-
+// Parse vehicle product data and handles
 const productData = JSON.parse(
   document.getElementById("vehicle-products").textContent
 );
+const vehicleHandles = JSON.parse(
+  document.getElementById("vehicleHandles").textContent
+);
 
-const vehicleData = {
-  jeep: [
+// Indexed coordinate mapping
+const coordinateMap = [
+  [
     { pos: ["30%", "13%"] },
     { pos: ["82%", "26%"] },
     { pos: ["35%", "55%"] },
@@ -29,7 +25,7 @@ const vehicleData = {
     { pos: ["25%", "90%"] },
     { pos: ["51%", "89%"] },
   ],
-  truck: [
+  [
     { pos: ["60%", "18%"] },
     { pos: ["25%", "23%"] },
     { pos: ["12%", "42%"] },
@@ -37,86 +33,89 @@ const vehicleData = {
     { pos: ["29%", "73%"] },
     { pos: ["40%", "84%"] },
   ],
-  car : [
+  [
     { pos: ["67%", "13%"] },
     { pos: ["43%", "30%"] },
     { pos: ["14%", "48%"] },
     { pos: ["28%", "62%"] },
     { pos: ["48%", "80%"] },
   ],
-  motorcycle: [
+  [
     { pos: ["28%", "21%"] },
     { pos: ["45%", "30%"] },
     { pos: ["59%", "49%"] },
     { pos: ["56%", "78%"] },
     { pos: ["69%", "88%"] },
   ],
-  cybertruck: [
+  [
     { pos: ["80%", "10%"] },
     { pos: ["45%", "16%"] },
     { pos: ["12%", "34%"] },
     { pos: ["70%", "63%"] },
     { pos: ["23%", "84%"] },
   ],
-};
+];
 
-// Merge product data into vehicleData [Necessary]
-for (const type in vehicleData) {
-  const products = productData[type] || [];
+// Construct dynamic vehicle data
+const vehicleData = {};
+vehicleHandles.forEach((handle, idx) => {
+  const coordinates = coordinateMap[idx] || [];
+  const products = productData[handle.toLowerCase()] || [];
 
-  vehicleData[type] = vehicleData[type].map((marker, index) => {
-    const product = products[index];
-    return {
-      ...marker,
-      title: product?.title ?? "",
-      price: product?.price ?? "",
-      img: product?.img ?? "",
-      url: product?.url ?? "",
-    };
-  });
-}
+  // For rendering only those markers which have product (Fallback Case)
+  const length = Math.min(coordinates.length, products.length);
+  vehicleData[handle] = coordinates.slice(0, length).map((coord, i) => ({
+    ...coord,
+    title: products[i].title,
+    price: products[i].price,
+    img: products[i].img,
+    url: products[i].url,
+  }));
+});
 
-const vehicleKeys = Object.keys(vehicleImages);
 let currentSlide = 0;
 
-// Update main image view by fade
-function updateCarouselPosition(vehicle) {
-  // Start fade-out
-  carouselImages.classList.add("fade");
+function updateCarouselPosition(vehicleKey) {
+  const markerContainer = document.getElementById("markerContainer");
+  const loader = document.getElementById("imageLoader");
+  const currentImage = carouselSlides[currentSlide];
 
-  // Wait for fade-out
-  setTimeout(() => {
-    // Move the image
+  // Check if image is already loaded
+  const isImageLoaded =
+    currentImage.complete && currentImage.naturalHeight !== 0;
+
+  if (!isImageLoaded) {
+    loader.style.display = "block";
+    markerContainer.style.display = "none";
+
+    currentImage.onload = () => {
+      finalizeRender();
+    };
+  } else {
+    finalizeRender();
+  }
+
+  function finalizeRender() {
     carouselImages.style.transform = `translateX(-${currentSlide * 100}%)`;
-
-    // 👇 Render markers/cards before fade-in starts
-    renderVehicle(vehicle);
-
-    // Start fade-in
-    carouselImages.classList.remove("fade");
-  }, 200); // ~fade-out duration
+    renderVehicle(vehicleKey);
+    loader.style.display = "none";
+    markerContainer.style.display = "block";
+  }
 }
 
-// Change selected vehicle programmatically
-function switchVehicle(vehicle) {
-  vehicleButtons.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.vehicle === vehicle);
-  });
-
-  // Let updateCarouselPosition handle rendering
-  updateCarouselPosition(vehicle);
+function switchVehicle(vehicleKey) {
+  vehicleButtons.forEach((btn) =>
+    btn.classList.toggle("active", btn.dataset.vehicle === vehicleKey)
+  );
+  updateCarouselPosition(vehicleKey);
 }
 
-// Render parts and markers
-function renderVehicle(vehicle) {
+function renderVehicle(vehicleKey) {
   markerContainer.innerHTML = "";
   cardStack.innerHTML = "";
 
-  const parts = vehicleData[vehicle];
-  console.log(vehicle);
-  console.log(vehicleData[vehicle]);
+  const parts = vehicleData[vehicleKey] || [];
   parts.forEach((part, index) => {
-    console.log(part.url);
     const marker = document.createElement("div");
     marker.className = "tr-marker";
     marker.textContent = index + 1;
@@ -126,19 +125,20 @@ function renderVehicle(vehicle) {
     const card = document.createElement("div");
     card.className = "tr-card";
     card.innerHTML = `
-    <a href="${part.url || ""}" class="tr-text-decoration-none">
-    <div class="tr-card-badge">${index + 1}</div>
-    <img src="${part.img}" alt="${part.title}" />
-    <div class="tr-card-body">
-      <div class="tr-card-info">
-        <h4>${part.title}</h4>
-        <p>${part.price}</p>
-      </div>
-       <a href="${
-         part.url || ""
-       }" class="tr-view-btn">VIEW PRODUCT <span>❯</span></a>
-    </div></a>
-  `;
+      <a href="${part.url}" class="tr-text-decoration-none">
+        <div class="tr-card-badge">${index + 1}</div>
+        <img src="${part.img}" alt="${part.title}" />
+        <div class="tr-card-body">
+          <div class="tr-card-info">
+            <h4>${part.title}</h4>
+            <p>${part.price}</p>
+          </div>
+          <a href="${
+            part.url
+          }" class="tr-view-btn">VIEW PRODUCT <span>❯</span></a>
+        </div>
+      </a>
+    `;
 
     markerContainer.appendChild(marker);
     cardStack.appendChild(card);
@@ -147,24 +147,17 @@ function renderVehicle(vehicle) {
       document
         .querySelectorAll(".tr-marker, .tr-card")
         .forEach((el) => el.classList.remove("active"));
-
       marker.classList.add("active");
       card.classList.add("active");
 
-      // Scroll horizontally to center the card
-      const cardContainer = card.parentElement;
-      const containerRect = cardContainer.getBoundingClientRect();
+      const containerRect = cardStack.getBoundingClientRect();
       const cardRect = card.getBoundingClientRect();
-
       const scrollLeft =
-        cardContainer.scrollLeft +
+        cardStack.scrollLeft +
         (cardRect.left - containerRect.left) -
         (containerRect.width / 2 - cardRect.width / 2);
 
-      cardContainer.scrollTo({
-        left: scrollLeft,
-        behavior: "smooth",
-      });
+      cardStack.scrollTo({ left: scrollLeft, behavior: "smooth" });
     });
 
     card.addEventListener("mouseenter", () => {
@@ -177,56 +170,55 @@ function renderVehicle(vehicle) {
   });
 }
 
-// Button click handlers
-vehicleButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const vehicle = button.dataset.vehicle;
-    currentSlide = vehicleKeys.indexOf(vehicle);
-    switchVehicle(vehicle);
+vehicleButtons.forEach((btn, idx) => {
+  btn.addEventListener("click", () => {
+    const vehicleKey = vehicleHandles[idx];
+    currentSlide = idx;
+    switchVehicle(vehicleKey);
     cardStack.scrollLeft = 0;
   });
 });
 
-// Arrow navigation
 leftArrow.addEventListener("click", () => {
-  currentSlide = (currentSlide - 1 + vehicleKeys.length) % vehicleKeys.length;
-  switchVehicle(vehicleKeys[currentSlide]);
+  currentSlide =
+    (currentSlide - 1 + vehicleHandles.length) % vehicleHandles.length;
+  switchVehicle(vehicleHandles[currentSlide]);
 });
 
 rightArrow.addEventListener("click", () => {
-  currentSlide = (currentSlide + 1) % vehicleKeys.length;
-  switchVehicle(vehicleKeys[currentSlide]);
+  currentSlide = (currentSlide + 1) % vehicleHandles.length;
+  switchVehicle(vehicleHandles[currentSlide]);
 });
 
-// Init
-switchVehicle("jeep");
+// Initialize
+if (vehicleHandles.length > 0) {
+  switchVehicle(vehicleHandles[0]);
+}
 
-// Drag-to-scroll on card carousel
+// Drag-to-scroll
 let isDown = false,
   startX,
-  scrollLeft;
-
+  scrollStart;
 cardStack.addEventListener("mousedown", (e) => {
   isDown = true;
   startX = e.pageX - cardStack.offsetLeft;
-  scrollLeft = cardStack.scrollLeft;
+  scrollStart = cardStack.scrollLeft;
   cardStack.classList.add("active");
 });
-cardStack.addEventListener("mouseleave", () => (isDown = false));
-cardStack.addEventListener("mouseup", () => (isDown = false));
+["mouseleave", "mouseup"].forEach((evt) =>
+  cardStack.addEventListener(evt, () => (isDown = false))
+);
 cardStack.addEventListener("mousemove", (e) => {
   if (!isDown) return;
   e.preventDefault();
   const x = e.pageX - cardStack.offsetLeft;
   const walk = (x - startX) * 2;
-  cardStack.scrollLeft = scrollLeft - walk;
+  cardStack.scrollLeft = scrollStart - walk;
 });
 
 // Deselect on outside click
 document.addEventListener("click", (e) => {
-  const isMarker = e.target.closest(".tr-marker");
-  const isCard = e.target.closest(".tr-card");
-  if (!isMarker && !isCard) {
+  if (!e.target.closest(".tr-marker") && !e.target.closest(".tr-card")) {
     document
       .querySelectorAll(".tr-marker, .tr-card")
       .forEach((el) => el.classList.remove("active"));
