@@ -75,6 +75,7 @@
               {
                 "title": {{ product.title | json }},
                 "price": {{ product.price | money | json }},
+                "compare_at_price": {{ product.compare_at_price | money | json }},
                 "img": {% if product.featured_image %} {{ product.featured_image | image_url | json }} {% else %} null {% endif %},
                 "url": {{ product.url | json }}
               }{% unless forloop.last %},{% endunless %}

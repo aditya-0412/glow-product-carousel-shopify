@@ -154,9 +154,19 @@
 }
 
 .tr-card-body p {
-  color: #444;
-  font-style: italic;
   margin: 0;
+}
+
+.tr-card-body p.tr-compare-at-price {
+  text-decoration: line-through;
+  font-size: 14px;
+  color: #444;
+}
+
+.tr-card-body p.tr-price {
+  color: #df1f26;
+  font-style: italic;
+  font-weight: 500;
 }
 
 /* Badge */

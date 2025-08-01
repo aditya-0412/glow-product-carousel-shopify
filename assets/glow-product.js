@@ -68,6 +68,7 @@ vehicleHandles.forEach((handle, idx) => {
     ...coord,
     title: products[i].title,
     price: products[i].price,
+    compare_at_price: products[i].compare_at_price,
     img: products[i].img,
     url: products[i].url,
   }));
@@ -131,7 +132,8 @@ function renderVehicle(vehicleKey) {
         <div class="tr-card-body">
           <div class="tr-card-info">
             <h4>${part.title}</h4>
-            <p>${part.price}</p>
+            <p class="tr-price">${part.price}</p>
+            <p class="tr-compare-at-price">${part.compare_at_price}</p>
           </div>
           <a href="${
             part.url
